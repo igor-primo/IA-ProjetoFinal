@@ -1,0 +1,12 @@
+Um problema de satisfação de restrições consiste em três componentes X, D e C:
+1. X é um conjunto de variáveis.
+2. D é um conjunto de domínios, um para cada variável.
+3. C é um conjunto de restrições que especificam combinações permitidas de valores.
+
+Como encaixar o problema do projeto nessa definição?
+
+1. X é o conjunto de pessoas. P, no artigo.
+2. D é o conjunto de conjuntos de horas possíveis para
+uma pessoa. É visível na definição de 'free'.
+3. C é o conjunto de restrições explicitamente dadas. Como
+encaixá-las na linguagem do CSP?
