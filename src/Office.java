@@ -4,85 +4,62 @@ import aima.core.search.csp.Domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 
-public class Office extends CSP<Variable, Integer>{
+public class Office extends CSP<Variable, String>{
 
-	public static final Variable Alice = new Variable("Alice");
-	public static final Variable Bob = new Variable("Bob");
-	public static final Variable Charlie = new Variable("Charlie");
-	public static final Variable David = new Variable("David");
-	public static final Variable Eve = new Variable("Eve");
+	int hours = 24;
 
 	public Office(){
 
-		List<Integer> valuesAlice = new ArrayList<Integer>();
-		valuesAlice.add(4);
-		valuesAlice.add(13);
-		valuesAlice.add(19);
-		valuesAlice.add(21);
-		valuesAlice.add(22);
-		Domain<Integer> domainAlice = 
-			new Domain<Integer>(valuesAlice);
+		List<Person> persons = new ArrayList<>();
+		persons.add(new Person(
+					"Alice", 
+					Arrays.asList(new Integer[]{4, 13, 19, 21, 22}),
+					2
+					));
+		persons.add(new Person(
+					"Bob", 
+					Arrays.asList(new Integer[]{6, 9, 10, 14, 15, 21}),
+					3
+					));
+		persons.add(new Person(
+					"Charlie", 
+					Arrays.asList(new Integer[]{5, 8, 10, 13, 14, 21, 22, 23}),
+					1
+					));
+		persons.add(new Person(
+					"David", 
+					Arrays.asList(new Integer[]{1, 3, 4, 5, 6, 7, 19, 23}),
+					2
+					));
+		persons.add(new Person(
+					"Eve", 
+					Arrays.asList(new Integer[]{2, 4, 7, 10, 11, 13, 14, 15, 18, 21}),
+					4
+					));
 
-		List<Integer> valuesBob = new ArrayList<Integer>();
-		valuesBob.add(6);
-		valuesBob.add(9);
-		valuesBob.add(10);
-		valuesBob.add(14);
-		valuesBob.add(15);
-		valuesBob.add(21);
-		Domain<Integer> domainBob = 
-			new Domain<Integer>(valuesBob);
+		for(int i=0;i<hours;i++){
+			Variable v = new Variable(Integer.toString(i+1));
+			addVariable(v);
+		}
 
-		List<Integer> valuesCharlie = new ArrayList<Integer>();
-		valuesCharlie.add(5);
-		valuesCharlie.add(8);
-		valuesCharlie.add(10);
-		valuesCharlie.add(13);
-		valuesCharlie.add(14);
-		valuesCharlie.add(21);
-		valuesCharlie.add(22);
-		valuesCharlie.add(23);
-		Domain<Integer> domainCharlie = 
-			new Domain<Integer>(valuesCharlie);
+		for(Variable v : getVariables()){
+			int vint = Integer.parseInt(v.toString()); 		//Inteiro representando a hora
+			List<String> domainValues = new ArrayList<>(); 	//Lista de valores de domínio para a hora
+			for(Person p : persons){						//Para cada pessoa			
+				if(p.getHours().contains(vint))				//Verifique se a hora é uma em que ele pode trabalhar
+					domainValues.add(p.getName());			//Se sim, adicione na lista de valores de domínio
 
-		List<Integer> valuesDavid = new ArrayList<Integer>();
-		valuesDavid.add(1);
-		valuesDavid.add(3);
-		valuesDavid.add(4);
-		valuesDavid.add(5);
-		valuesDavid.add(6);
-		valuesDavid.add(7);
-		valuesDavid.add(19);
-		valuesDavid.add(23);
-		Domain<Integer> domainDavid = 
-			new Domain<Integer>(valuesDavid);
+			}
+			Domain<String> domain = new Domain<>(domainValues);
+			setDomain(v, domain);
+		}
 
-		List<Integer> valuesEve = new ArrayList<Integer>();
-		valuesEve.add(2);
-		valuesEve.add(4);
-		valuesEve.add(7);
-		valuesEve.add(10);
-		valuesEve.add(11);
-		valuesEve.add(13);
-		valuesEve.add(14);
-		valuesEve.add(15);
-		valuesEve.add(18);
-		valuesEve.add(21);
-		Domain<Integer> domainEve = 
-			new Domain<Integer>(valuesEve);
+		//Restricoes
 
-		addVariable(Alice);
-		addVariable(Bob);
-		addVariable(Charlie);
-		addVariable(David);
-		addVariable(Eve);
-
-		setDomain(Alice, domainAlice);
-		setDomain(Bob, domainBob);
-		setDomain(Charlie, domainCharlie);
-		setDomain(David, domainDavid);
-		setDomain(Eve, domainEve);
+		List<Variable> variablesList = getVariables();
+		addConstraint(new WorkTimePrefersConstraint<>(variablesList, persons));
 
 	}
 
