@@ -39,7 +39,7 @@ public class Program2{
 			System.out.println((solution.get().isSolution(csp) ? ":-) " : ":-( ") + solution.get());
 		System.out.println(stepCounter.getResults() + "\n");
 
-		/*
+		
 		System.out.println("-Scheduling (Backtracking + MRV & DEG + LCV + AC3)");
 		solver = new FlexibleBacktrackingSolver<Variable, String>().setAll();
 		solver.addCspListener(stepCounter);
@@ -58,7 +58,7 @@ public class Program2{
 		if (solution.isPresent())
 			System.out.println(solution.get());
 		System.out.println(stepCounter.getResults() + "\n");
-		*/
+		
 
 	}
 

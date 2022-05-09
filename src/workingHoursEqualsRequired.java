@@ -27,19 +27,26 @@ public class workingHoursEqualsRequired<VAR extends Variable, VAL> implements Co
 	@Override
 	public boolean isSatisfiedWith(Assignment<Variable, String> assignment){
 		List<String> assigned = new ArrayList<>();
+		boolean isSomethingNull = false;
 		for(Variable v : vL)
 			assigned.add(assignment.getValue(v));
+		for(String s : assigned)
+			if(s == null)
+				isSomethingNull = true;
 		//for(String s : assigned)
 			//System.out.print(s + " ");
 		//System.out.println("");
-		for(Person p : pL){
-			int cont = 0;
-			for(String s : assigned)
-				if(s.equals(p.getName()))
-					cont++;
-			if(cont != p.required_hours)
-				return false;
-		}
-		return true;
+		if(!isSomethingNull){
+			for(Person p : pL){
+				int cont = 0;
+				for(String s : assigned)
+					if(s.equals(p.getName()))
+						cont++;
+				if(cont != p.required_hours)
+					return false;
+			}
+			return true;
+		} else 
+			return isSomethingNull;
 	}
 }
