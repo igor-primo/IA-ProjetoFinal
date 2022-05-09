@@ -45,21 +45,24 @@ public class Office extends CSP<Variable, String>{
 		}
 
 		for(Variable v : getVariables()){
-			int vint = Integer.parseInt(v.toString()); 		//Inteiro representando a hora
-			List<String> domainValues = new ArrayList<>(); 	//Lista de valores de domínio para a hora
-			for(Person p : persons){						//Para cada pessoa			
-				if(p.getHours().contains(vint))				//Verifique se a hora é uma em que ele pode trabalhar
-					domainValues.add(p.getName());			//Se sim, adicione na lista de valores de domínio
+			int vint = Integer.parseInt(v.toString()); 	
+			List<String> domainValues = new ArrayList<>(); 
+			for(Person p : persons){					
+				if(p.getHours().contains(vint)){				
+					domainValues.add(p.getName());
+				}
 
 			}
+			domainValues.add("NO");
 			Domain<String> domain = new Domain<>(domainValues);
 			setDomain(v, domain);
 		}
 
 		//Restricoes
 
-		List<Variable> variablesList = getVariables();
-		addConstraint(new WorkTimePrefersConstraint<>(variablesList, persons));
+		//for(Variable v : getVariables())
+				//addConstraint(new workAtPreferedHour<>(v));
+		addConstraint(new workingHoursEqualsRequired<>(persons, getVariables()));
 
 	}
 
