@@ -15,7 +15,12 @@ public class Program2{
 
 	public static void main(String[] args){
 
-		Office off = new Office();
+		if(args.length < 1 || 1 < args.length){
+			System.out.println("A aplicação precisa de exatamente 1 caminho de arquivo como argumento de linha de comando.");
+			System.exit(1);
+		}
+
+		Office off = new Office(args[0]);
 
 		System.out.println("Started");
 
@@ -26,7 +31,7 @@ public class Program2{
 			System.out.println(domain);
 		}
 
-		CSP<Variable, Integer> csp = new Office();
+		CSP<Variable, Integer> csp = new Office(args[0]);
 		CspListener.StepCounter<Variable, Integer> stepCounter = new CspListener.StepCounter<>();
 		CspSolver<Variable, Integer> solver;
 		Optional<Assignment<Variable, Integer>> solution;
@@ -50,7 +55,7 @@ public class Program2{
 			System.out.println(solution.get());
 		System.out.println(stepCounter.getResults() + "\n");
 
-		csp = new Office();
+		csp = new Office(args[0]);
 		System.out.println("-Scheduling (Backtracking)");
 		solver = new FlexibleBacktrackingSolver<>();
 		solver.addCspListener(stepCounter);

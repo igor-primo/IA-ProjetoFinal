@@ -6,41 +6,41 @@ import aima.core.search.csp.Domain;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class Office extends CSP<Variable, Integer>{
 
 	int hours = 24;
 
-	public Office(){
+	public Office(String path){
 
 		List<Person> persons = new ArrayList<>();
-		persons.add(new Person(
-					"Alice", 
-					Arrays.asList(new Integer[]{4, 13, 19, 21, 22}),
-					2
-					));
-		persons.add(new Person(
-					"Bob", 
-					Arrays.asList(new Integer[]{6, 9, 10, 14, 15, 21}),
-					3
-					));
-		persons.add(new Person(
-					"Charlie", 
-					Arrays.asList(new Integer[]{5, 8, 10, 13, 14, 21, 22, 23}),
-					1
-					));
-		persons.add(new Person(
-					"David", 
-					Arrays.asList(new Integer[]{1, 3, 4, 5, 6, 7, 19, 23}),
-					2
-					));
-		persons.add(new Person(
-					"Eve", 
-					Arrays.asList(new Integer[]{2, 4, 7, 10, 11, 13, 14, 15, 18, 21}),
-					4
-					));
+		String line = "";
+		String splitBy = ",";
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(path));
+			while((line = br.readLine()) != null){
+				String[] lineSplit = line.split(splitBy);
+				if(lineSplit.length == 26){
+					System.out.println("Nome: "+lineSplit[0]);
+					System.out.println("Carga horária: "+lineSplit[1]);
+					List<Integer> hours = new ArrayList<>();
+					for(int i=2;i<26;i++)
+						if(lineSplit[i].equals("1"))
+							hours.add(i-1);
+					persons.add(new Person(lineSplit[0], hours, Integer.parseInt(lineSplit[1])));
+				} else{
+					System.out.println("Número de argumentos na linha "+line+" está errado.");
+					System.exit(1);
+				}
+			}
+		} catch(IOException e){
+			e.printStackTrace();
+		}
 
-		//cria uma vari�vel para cada hora que a pessoa tem que trabalhar
+		//cria uma variavel para cada hora que a pessoa tem que trabalhar
 		for (int i = 0; i < persons.size(); i++) {
 			for (int j = 0; j < persons.get(i).required_hours; j++) {
 				Variable v = new Variable(persons.get(i).name+j);
@@ -53,7 +53,7 @@ public class Office extends CSP<Variable, Integer>{
 
 		//Restricoes
 		for(Variable v : getVariables()) {
-				addConstraint(new NotEqualConstraint(v,getVariables()));
+				addConstraint(new NotEqualConstraint<>(v,getVariables()));
 		}
 
 	}
