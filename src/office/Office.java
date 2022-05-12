@@ -24,8 +24,8 @@ public class Office extends CSP<Variable, Integer>{
 			while((line = br.readLine()) != null){
 				String[] lineSplit = line.split(splitBy);
 				if(lineSplit.length == 26){
-					System.out.println("Nome: "+lineSplit[0]);
-					System.out.println("Carga horária: "+lineSplit[1]);
+					//System.out.println("Nome: "+lineSplit[0]);
+					//System.out.println("Carga horária: "+lineSplit[1]);
 					List<Integer> hours = new ArrayList<>();
 					for(int i=2;i<26;i++)
 						if(lineSplit[i].equals("1"))
