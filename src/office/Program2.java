@@ -63,10 +63,11 @@ public class Program2{
 		solution = solver.solve(csp);
 		if (solution.isPresent()){
 			//System.out.println(solution.get().toString());
-			for(Variable v: solution.get().getVariables()){
-				int hour = solution.get().getValue(v);
-				System.out.println(v.toString() + " " + Integer.toString(hour));
-			}
+			for(int hour=1;hour<=24;hour++)
+				for(Variable v: solution.get().getVariables())
+					if(solution.get().getValue(v) == hour)
+						System.out.println(Integer.toString(hour) + " " + v.toString());
+			
 		}
 		System.out.println(stepCounter.getResults() + "\n");
 	
