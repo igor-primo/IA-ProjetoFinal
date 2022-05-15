@@ -16,20 +16,23 @@ public class Program2{
 
 	public static void main(String[] args) {
 
-		// Files
+		// Arquivos
 		File f0 = getFile("file0.csv");
 		File f0n =getFile("file0noSol.csv");
 		File f2 = getFile("file2.csv");
+		File f3 = getFile("file3.csv");
 
 		// Offices
 		Office off0 = new Office(f0, 0);
-		Office off0n = new Office(f0n, 0);// no solution
-		Office off2 = new Office(f2, 2);// Alice, Bob e Eve são vacinados
+		Office off0n = new Office(f0n, 0);//Sem solução
+		Office off2 = new Office(f2, 2);//Alice, Bob e Eve são vacinados
+		Office off3 = new Office(f3, 3);//Variante 3
 
 		// CSP parameters
 		CSP<Variable, Integer> csp0 = new Office(f0, 0);
 		CSP<Variable, Integer> csp0n = new Office(f0n, 0);
 		CSP<Variable, Integer> csp2 = new Office(f2, 2);
+		CSP<Variable, Integer> csp3 = new Office(f3, 3);
 		CspListener.StepCounter<Variable, Integer> stepCounter = new CspListener.StepCounter<>();
 		CspSolver<Variable, Integer> solver = null;
 		Optional<Assignment<Variable, Integer>> solution = null;
@@ -48,7 +51,7 @@ public class Program2{
 		startBacktracking(csp0, stepCounter, solver, solution);
 
 		// Office file0noSol
-		System.out.println("Main Office Started\n");
+		System.out.println("Main Office Started no Solution\n");
 
 		for (Variable v : off0n.getVariables()) {
 			String s = v.toString();
@@ -69,6 +72,17 @@ public class Program2{
 		}
 		System.out.println("Vacinados: "+off2.getAllNamesVac());
 		startBacktracking(csp2, stepCounter, solver, solution);
+		
+		// Office file3
+		System.out.println("Variant 3 Office Started\n");
+
+		for (Variable v : off3.getVariables()) {
+			String s = v.toString();
+			Domain<Integer> domain = off3.getDomain(v);
+			System.out.print(s + " ");
+			System.out.println(domain);
+		}
+		startBacktracking(csp3, stepCounter, solver, solution);
 
 	}
 	

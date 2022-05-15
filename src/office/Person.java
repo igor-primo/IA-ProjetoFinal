@@ -1,12 +1,25 @@
 package office;
 import java.util.List;
 
+/*	Classe responsável criar Pessoa
+ * 	Tem como váriaveis: 
+ * 										name = Nome da pessoa, 
+ * 										hours = Horas de trabalho disponíveis para aquela pessoa, 
+ * 										required_hours = Quantidade de horas que deve trabalhar
+ * 	Tem como métodos:
+ * 										Construtor que cria a Pessoa, recebe => Name (string), Hours(lista de inteiros), Required_hours(int)
+ * 										Construtor que cria a Pessoa para a variante dois, recebe => Name (string), Hours(lista de inteiros), Required_hours(int), Vaccinated(int 0 ou 1)
+ * 										getName: Retorna o nome da pessoa
+ * 										getHours: Retorna a lista com horas disponíveis
+ * 										isVaccinated: Retorna 1 para vacinado e 0 para não vacinado
+ */
+
 public class Person{
 	
 	String name;
 	List<Integer> hours;
 	int required_hours;
-	int vaccinated=0; //1 é vacinada, 0 não é
+	int vaccinated = 0; //1 é vacinada, 0 não é
 
 	public Person(String name, List<Integer> hours, int required_hours){
 
@@ -16,7 +29,6 @@ public class Person{
 
 	}
 	
-	//Pessoa na variante 2
 	public Person(String name, List<Integer> hours, int required_hours, int vaccinated){
 
 		this.name = name;
