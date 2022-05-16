@@ -28,8 +28,16 @@ public class Person{
 
 	}
 
+	public int getId(){ return this.id; }
+
 	public String getName(){ return this.name; }
 
-	public List<Integer> getHours(){ return this.hours; }
+	public boolean getIsVacinado(){ return this.is_vacinado; }
 
+	public int getRequiredHours(){ return this.required_hours; }
+
+	public int getDependeDe(){ return this.depende_de; }
+
+	public List<Integer> getHours(){ return this.hours; }
+	
 }
