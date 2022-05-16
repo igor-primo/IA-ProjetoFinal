@@ -36,7 +36,7 @@ public class Office extends CSP<Variable, Integer>{
 					List<Integer> hours = new ArrayList<>();
 					for(int i=5;i<29;i++)
 						if(lineSplit[i].equals("1"))
-							hours.add(i-1);
+							hours.add(i-4);
 					persons.add(new Person(
 								id,
 								nome,

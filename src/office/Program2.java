@@ -27,9 +27,9 @@ public class Program2{
 			System.exit(1);
 		} else {
 			List<String> variant_possible = Arrays.asList("0", "1", "2", "3");
-			List<String> hours_interval__possible = new ArrayList<>();
+			List<String> hours_interval_possible = new ArrayList<>();
 			for(int i=1;i<=24;i++)
-				hours_interval__possible.add(Integer.toString(i));
+				hours_interval_possible.add(Integer.toString(i));
 			List<String> cmd_args = Arrays.asList("-v", "-i");
 			for(int i=0;i<args.length;)
 				switch(args[i]){
@@ -41,7 +41,7 @@ public class Program2{
 							i++;
 							c++;
 						}
-						if(i < args.length && (!cmd_args.contains(args[i]) || 3 < c)){
+						if(3 < c || (i < args.length && !cmd_args.contains(args[i]))){
 							System.out.println(example);
 							System.exit(1);
 						}
@@ -49,12 +49,12 @@ public class Program2{
 					case "-i":
 						i++;
 						c = 0;
-						while(i < args.length && hours_interval__possible.contains(args[i])){
+						while(i < args.length && hours_interval_possible.contains(args[i])){
 							hours_interval.add(args[i]);
 							i++;
 							c++;
 						}
-						if(i < args.length && (!cmd_args.contains(args[i]) || c != 2)){
+						if(2 != c || (i < args.length && !cmd_args.contains(args[i]))){
 							System.out.println(example);
 							System.exit(1);
 						}
@@ -80,9 +80,7 @@ public class Program2{
 			System.out.print(s+" ");
 			System.out.println(domain);
 		}
-		/*
-
-		CSP<Variable, Integer> csp = new Office(args[0]);
+		CSP<Variable, Integer> csp = new Office(args[0], variants, hours_interval);
 		CspListener.StepCounter<Variable, Integer> stepCounter = new CspListener.StepCounter<>();
 		CspSolver<Variable, Integer> solver;
 		Optional<Assignment<Variable, Integer>> solution;
@@ -106,7 +104,7 @@ public class Program2{
 			System.out.println(solution.get());
 		System.out.println(stepCounter.getResults() + "\n");
 
-		csp = new Office(args[0]);
+		csp = new Office(args[0], variants, hours_interval);
 		System.out.println("-Scheduling (Backtracking)");
 		solver = new FlexibleBacktrackingSolver<>();
 		solver.addCspListener(stepCounter);
@@ -116,7 +114,13 @@ public class Program2{
 			System.out.println(solution.get());
 		System.out.println(stepCounter.getResults() + "\n");
 	
-		*/
+		if(solution.isPresent()){
+			//System.out.println(solution.get().toString());
+			for(int hour=1;hour<=24;hour++)
+				for(Variable v: solution.get().getVariables())
+					if(solution.get().getValue(v) == hour)
+						System.out.println(Integer.toString(hour) + " " + v.toString());
+		}
 
 	}
 
