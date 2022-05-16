@@ -3,15 +3,28 @@ import java.util.List;
 
 public class Person{
 	
+	int id;
 	String name;
-	List<Integer> hours;
+	boolean is_vacinado;
 	int required_hours;
+	int depende_de;
+	List<Integer> hours;
 
-	public Person(String name, List<Integer> hours, int required_hours){
+	public Person(
+			int id,
+			String name, 
+			boolean is_vacinado,
+			int required_hours,
+			int depende_de,
+			List<Integer> hours
+	){
 
+		this.id = id;
 		this.name = name;
-		this.hours = hours;
+		this.is_vacinado = is_vacinado;
 		this.required_hours = required_hours;
+		this.depende_de = depende_de;
+		this.hours = hours;
 
 	}
 
