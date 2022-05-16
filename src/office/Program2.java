@@ -26,7 +26,7 @@ public class Program2{
 			System.out.println(usage);
 			System.exit(1);
 		} else {
-			List<String> variant_possible = Arrays.asList("0", "1", "2", "3");
+			List<String> variant_possible = Arrays.asList("1", "2", "3");
 			List<String> hours_interval_possible = new ArrayList<>();
 			for(int i=1;i<=24;i++)
 				hours_interval_possible.add(Integer.toString(i));

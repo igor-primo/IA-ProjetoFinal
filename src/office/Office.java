@@ -67,15 +67,15 @@ public class Office extends CSP<Variable, Integer>{
 		}
 
 		//Restricoes (caso sem variantes ou variante 0
-		for(Variable v : getVariables())
-				addConstraint(new NotEqualConstraint<>(v, getVariables()));
+		if(variants.isEmpty())
+			for(Variable v : getVariables())
+					addConstraint(new NotEqualConstraint<>(v, getVariables()));
+		else if(variants.contains("2")){
+			//Adicionar variante 2 como classe
+		}
 
 		if(variants.contains("1")){
 			//Adicionar variante 1 como classe
-		}
-
-		if(variants.contains("2")){
-			//Adicionar variante 2 como classe
 		}
 
 		if(variants.contains("3")){
