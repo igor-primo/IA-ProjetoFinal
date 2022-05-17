@@ -78,11 +78,16 @@ public class Office extends CSP<Variable, Integer>{
 			}
 		}
 
+		if(variants.contains("1")){
+			//Adicionar variante 1 como classe
+			//addConstraint(new DependentConstraint<>(getVariables(), persons));
+		}
+
 		//Restricoes (caso sem variantes ou variante 0
-		if(variants.isEmpty())
+		if(!variants.contains("2"))
 			for(Variable v : getVariables())
 					addConstraint(new NotEqualConstraint<>(v, getVariables()));
-		else if(variants.contains("2")){
+		else {
 			/* Adicionar variante 2 como classe */
 			/* pegue lista de pessoas vacinadas */
 			/* Solução adaptada da solução de Ana Letícia */
@@ -104,11 +109,6 @@ public class Office extends CSP<Variable, Integer>{
 									mesma_pessoa.add(_v);
 							addConstraint(new NotEqualConstraint<>(v, mesma_pessoa));
 						}
-		}
-
-		if(variants.contains("1")){
-			//Adicionar variante 1 como classe
-			//addConstraint(new DependentConstraint<>(getVariables(), persons));
 		}
 
 		/*
