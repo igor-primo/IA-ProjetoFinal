@@ -20,6 +20,16 @@ public class Office extends CSP<Variable, Integer>{
 			List<String> hours_interval
 	){
 
+		/* Esquema para variante 3 foi contribuição de Vinícius Moitinho */
+
+		int i_hour = 1;
+		int f_hour = 24;
+
+		if(variants.contains("3") && !hours_interval.isEmpty()){
+			i_hour = Integer.parseInt(hours_interval.get(0));
+			f_hour = Integer.parseInt(hours_interval.get(1));
+		}
+
 		List<Person> persons = new ArrayList<>();
 		String line = "";
 		String splitBy = ",";
@@ -35,7 +45,9 @@ public class Office extends CSP<Variable, Integer>{
 					int depende_de = Integer.parseInt(lineSplit[4]);
 					List<Integer> hours = new ArrayList<>();
 					for(int i=5;i<29;i++)
-						if(lineSplit[i].equals("1"))
+						if(lineSplit[i].equals("1")
+								&& i_hour <= (i-4)
+									&& (i-4) <= f_hour)
 							hours.add(i-4);
 					persons.add(new Person(
 								id,
@@ -96,11 +108,14 @@ public class Office extends CSP<Variable, Integer>{
 
 		if(variants.contains("1")){
 			//Adicionar variante 1 como classe
+			//addConstraint(new DependentConstraint<>(getVariables(), persons));
 		}
 
+		/*
 		if(variants.contains("3")){
 			//Adicionar variante 3 como classe
 		}
+		*/
 
 	}
 

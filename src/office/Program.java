@@ -11,9 +11,9 @@ import java.util.Arrays;
 
 import java.util.Optional;
 
-public class Program2{
+public class Program{
 
-	public static String usage = "Uso: java -jar <caminho_jar> <caminho_arquivo_csv> [-v <numero_variante>] [-i <intervalo_de_horas>].";
+	public static String usage = "Uso: java -jar <caminho_jar> <caminho_arquivo_csv> [-v <numero_variante>] [-i <intervalo_de_horas>]";
 	public static String example = "Exemplo: java -jar <caminho_jar> <caminho_arquivo_cs> -v 1 2 3 -i 8 15";
 
 	public static void main(String[] args){
@@ -21,6 +21,7 @@ public class Program2{
 		List<String> variants = new ArrayList<>();
 		List<String> hours_interval = new ArrayList<>();
 		int c = 0;
+		boolean debug = false;
 
 		if(args.length < 1 || 8 < args.length){
 			System.out.println(usage);
@@ -30,7 +31,7 @@ public class Program2{
 			List<String> hours_interval_possible = new ArrayList<>();
 			for(int i=1;i<=24;i++)
 				hours_interval_possible.add(Integer.toString(i));
-			List<String> cmd_args = Arrays.asList("-v", "-i");
+			List<String> cmd_args = Arrays.asList("-v", "-i", "-d");
 			for(int i=0;i<args.length;)
 				switch(args[i]){
 					case "-v":
@@ -59,6 +60,10 @@ public class Program2{
 							System.exit(1);
 						}
 						break;
+					case "-d":
+						debug = true;
+						i++;
+						break;
 					default:
 						i++;
 						break;
@@ -74,17 +79,20 @@ public class Program2{
 
 		System.out.println("Started");
 
-		for(Variable v : off.getVariables()){
-			String s = v.toString();
-			Domain<Integer> domain = off.getDomain(v);
-			System.out.print(s+" ");
-			System.out.println(domain);
-		}
+		if(debug)
+			for(Variable v : off.getVariables()){
+				String s = v.toString();
+				Domain<Integer> domain = off.getDomain(v);
+				System.out.print(s+" ");
+				System.out.println(domain);
+			}
+
 		CSP<Variable, Integer> csp = new Office(args[0], variants, hours_interval);
 		CspListener.StepCounter<Variable, Integer> stepCounter = new CspListener.StepCounter<>();
 		CspSolver<Variable, Integer> solver;
 		Optional<Assignment<Variable, Integer>> solution;
 		
+		/*
 		System.out.println("-Scheduling (Min-Conflicts)");
 		solver = new MinConflictsSolver<>(1000);
 		solver.addCspListener(stepCounter);
@@ -103,16 +111,19 @@ public class Program2{
 		if (solution.isPresent())
 			System.out.println(solution.get());
 		System.out.println(stepCounter.getResults() + "\n");
+		*/
 
 		csp = new Office(args[0], variants, hours_interval);
-		System.out.println("-Scheduling (Backtracking)");
+		if(debug) System.out.println("-Scheduling (Backtracking)");
 		solver = new FlexibleBacktrackingSolver<>();
 		solver.addCspListener(stepCounter);
 		stepCounter.reset();
 		solution = solver.solve(csp);
-		if (solution.isPresent())
-			System.out.println(solution.get());
-		System.out.println(stepCounter.getResults() + "\n");
+		if(debug){
+			if (solution.isPresent())
+				System.out.println(solution.get());
+			System.out.println(stepCounter.getResults() + "\n");
+		}
 	
 		if(solution.isPresent()){
 			//System.out.println(solution.get().toString());
