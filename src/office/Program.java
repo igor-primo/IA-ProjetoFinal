@@ -70,22 +70,47 @@ public class Program{
 				}
 		}
 
+		if((!hours_interval.isEmpty() 
+				&& !variants.contains("3"))
+					|| (hours_interval.isEmpty() 
+						&& variants.contains("3"))){
+			System.out.println("Os argumentos \"-v 3\" e \"-i\" precisam ser informadas conjuntamente. Abortando.");
+			System.exit(1);
+		}
+
 		System.out.println("Variantes:");
 		System.out.println(variants);
 		System.out.println("Intervalo de horários:");
 		System.out.println(hours_interval);
 
-		Office off = new Office(args[0], variants, hours_interval);
+		if(!variants.isEmpty())
+			System.out.println("\nSobre as variantes consideradas:\n");
+		if(variants.contains("1")){
+			System.out.println("1 - Prioridade no trabalho. Considerar-se-á que algum(s) ");
+			System.out.println("trabalhador(es) terá que esperar que algum outro termine.\n");
+		}
+		if(variants.contains("2")){
+			System.out.println("2 - Nova normalidade. Considerar-se-á que ");
+			System.out.println("trabalhadores vacinados podem trabalhar no mesmo ");
+			System.out.println("local ao mesmo tempo e que trabalhadores não vacinados trabalham sozinhos.\n");
+		}
+		if(variants.contains("3")){
+			System.out.println("3 - Restrição de horas no ofício. Considerar-se-á como ");
+			System.out.println("restrição um intervalo de horas especificado pelo usuário.");
+			System.out.println("O intervalo padrão é entre 1 (inclusive) e 24 (inclusive) horas.\n");
+		}
 
-		System.out.println("Started");
+		System.out.println("Começou.\n");
 
-		if(debug)
+		if(debug){
+			Office off = new Office(args[0], variants, hours_interval);
 			for(Variable v : off.getVariables()){
 				String s = v.toString();
 				Domain<Integer> domain = off.getDomain(v);
 				System.out.print(s+" ");
 				System.out.println(domain);
 			}
+		}
 
 		CSP<Variable, Integer> csp = new Office(args[0], variants, hours_interval);
 		CspListener.StepCounter<Variable, Integer> stepCounter = new CspListener.StepCounter<>();
@@ -126,12 +151,12 @@ public class Program{
 		}
 	
 		if(solution.isPresent()){
-			//System.out.println(solution.get().toString());
 			for(int hour=1;hour<=24;hour++)
 				for(Variable v: solution.get().getVariables())
 					if(solution.get().getValue(v) == hour)
 						System.out.println(Integer.toString(hour) + " " + v.toString());
-		}
+		} else
+			System.out.println("Não há solução dadas as restrições atuais.");
 
 	}
 

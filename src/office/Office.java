@@ -63,7 +63,9 @@ public class Office extends CSP<Variable, Integer>{
 				}
 			}
 		} catch(IOException e){
-			e.printStackTrace();
+			/* e.printStackTrace(); */
+			System.out.println("Por favor, verifique se o caminho do arquivo é válido.");
+			System.exit(1);
 		}
 
 		//cria uma variavel para cada pessoa 
@@ -80,10 +82,13 @@ public class Office extends CSP<Variable, Integer>{
 
 		if(variants.contains("1")){
 			//Adicionar variante 1 como classe
-			//addConstraint(new DependentConstraint<>(getVariables(), persons));
+			for(Variable v : getVariables())
+				for(Variable _v : getVariables())
+					addConstraint(new DependentConstraint<>(v, _v, persons));
 		}
 
 		//Restricoes (caso sem variantes ou variante 0
+		
 		if(!variants.contains("2"))
 			for(Variable v : getVariables())
 					addConstraint(new NotEqualConstraint<>(v, getVariables()));
