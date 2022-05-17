@@ -66,11 +66,6 @@ public class Office extends CSP<Variable, Integer>{
         
 		//Restricoes
 		for(Variable v : getVariables()) {
-			   if(variant==0) {
-				addConstraint(new NotEqualConstraint<>(v,getVariables()));
-			   }
-				if(variant==2) {
-					List<Variable> nonVac = new ArrayList<>();
 					String namePerson = v.toString().substring(0, v.toString().length()-1);
 					for(int i = 0; i < this.persons.size(); i++) {
 						if(this.persons.get(i).name.equals(namePerson)) { //encontra a pessoa que a variável se refere
@@ -78,14 +73,12 @@ public class Office extends CSP<Variable, Integer>{
 								addConstraint(new NotEqualConstraint<>(v,getVariables()));	
 							}
 							else {// se a pessoa for vacinada
-								List<Variable> nonVacAndMe = new ArrayList<>();
-								nonVacAndMe.addAll(getAllNonVac());
-								nonVacAndMe.addAll(getAllMe(namePerson));
-								addConstraint(new NotEqualConstraint<>(v, nonVacAndMe) );	
+								List<Variable> allMe = new ArrayList<>();
+								allMe.addAll(getAllMe(namePerson));
+								addConstraint(new NotEqualConstraint<>(v, allMe) );	
 							}
 						}
 					}
-				}
 		}
 
 	}
@@ -102,20 +95,6 @@ public class Office extends CSP<Variable, Integer>{
 		return allMe;
 	}
 	
-	public List<Variable> getAllNonVac() {
-		List<Variable> nonVac = new ArrayList<>();
-		for(Variable v : getVariables()) {
-					String namePerson = v.toString().substring(0, v.toString().length()-1);
-					for(int i = 0; i < this.persons.size(); i++) {
-						if(this.persons.get(i).name.equals(namePerson)) { //encontra a pessoa que a variável se refere
-							if(this.persons.get(i).isVaccinated()!=1) { //se a pessoa não for vacinada
-								nonVac.add(v);
-							}
-						}
-					}
-		}
-		return nonVac;
-	}
 	
 	public List<String> getAllNamesVac() {
 		List<String> namesVac = new ArrayList<>();
