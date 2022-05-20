@@ -81,10 +81,31 @@ public class Office extends CSP<Variable, Integer>{
 		}
 
 		if(variants.contains("1")){
-			//Adicionar variante 1 como classe
-			for(Variable v : getVariables())
-				for(Variable _v : getVariables())
-					addConstraint(new DependentConstraint<>(v, _v, persons));
+			String p1="";//p1 depende de p2
+			String p2="";
+			for(Person p : persons) {
+				if(p.depende_de!=-1) {
+				    p1=p.getName();
+					p2=persons.get(p.depende_de-1).getName();
+					List<Variable> varP1 = new ArrayList<>();
+					List<Variable> varP2 = new ArrayList<>();
+					for(Variable v : getVariables()) {
+						String namePerson = v.toString().substring(0, v.toString().length()-1);
+						if(namePerson.equals(p1)) {
+							varP1.add(v);
+						}
+						if(namePerson.equals(p2)) {
+							varP2.add(v);
+						}
+			        }
+					for(Variable v : varP1) {
+					addConstraint(new AfterThanConstraint<>(v, varP2)); //var de p1 maiores que as de p2
+					}
+					}
+				
+			}
+			
+	
 		}
 
 		//Restricoes (caso sem variantes ou variante 0
@@ -95,7 +116,7 @@ public class Office extends CSP<Variable, Integer>{
 		else {
 			/* Adicionar variante 2 como classe */
 			/* pegue lista de pessoas vacinadas */
-			/* Solução adaptada da solução de Ana Letícia */
+			/* Solucao adaptada da solucao de Ana Leticia */
 
 			List<Person> vacinados = new ArrayList<>();
 			for(Person p : persons)

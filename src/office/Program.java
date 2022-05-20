@@ -155,6 +155,7 @@ public class Program{
 				for(Variable v: solution.get().getVariables())
 					if(solution.get().getValue(v) == hour)
 						System.out.println(Integer.toString(hour) + " " + v.toString());
+			System.out.println(stepCounter.getResults() + "\n");
 		} else
 			System.out.println("Não há solução dadas as restrições atuais.");
 
