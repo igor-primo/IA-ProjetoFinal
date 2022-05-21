@@ -87,9 +87,9 @@ public class Office extends CSP<Variable, Integer>{
 					addConstraint(new DependentConstraint<>(v, _v, persons));
 		}
 
-		//Restricoes (caso sem variantes ou variante 0
+		//Restricoes caso sem variantes ou variante 0
 		
-		if(!variants.contains("2"))
+		if(!variants.contains("1") && !variants.contains("2") && !variants.contains("3"))
 			for(Variable v : getVariables())
 					addConstraint(new NotEqualConstraint<>(v, getVariables()));
 		else {
@@ -116,12 +116,12 @@ public class Office extends CSP<Variable, Integer>{
 						}
 		}
 
-		/*
+		
 		if(variants.contains("3")){
-			//Adicionar variante 3 como classe
+			for(Variable v : getVariables())
+				addConstraint(new NotEqualConstraint<>(v, getVariables()));
 		}
-		*/
-
+		
 	}
 
 }
