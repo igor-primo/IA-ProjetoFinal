@@ -4,6 +4,7 @@ import aima.core.search.csp.solver.CspListener;
 import aima.core.search.csp.solver.CspSolver;
 import aima.core.search.csp.solver.FlexibleBacktrackingSolver;
 import aima.core.search.csp.solver.MinConflictsSolver;
+import aima.core.search.csp.solver.inference.AC3Strategy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -140,7 +141,7 @@ public class Program{
 
 		csp = new Office(args[0], variants, hours_interval);
 		if(debug) System.out.println("-Scheduling (Backtracking)");
-		solver = new FlexibleBacktrackingSolver<>();
+		solver = new FlexibleBacktrackingSolver<Variable, Integer>().set(new AC3Strategy<>());
 		solver.addCspListener(stepCounter);
 		stepCounter.reset();
 		solution = solver.solve(csp);
@@ -151,13 +152,52 @@ public class Program{
 		}
 	
 		if(solution.isPresent()){
-			for(int hour=1;hour<=24;hour++)
-				for(Variable v: solution.get().getVariables())
-					if(solution.get().getValue(v) == hour)
-						System.out.println(Integer.toString(hour) + " " + v.toString());
+			int hel = 0;
+			List<Result> persons = new ArrayList<>();
+			List<String> names = new ArrayList<>();
+			int maior = 0;
+			String saida = "";
+			for(Variable v: solution.get().getVariables()) {
+				ArrayList<Character> list = new ArrayList<Character>();
+				for(int i = 0; i < v.toString().length(); i++) {
+					char current = v.toString().charAt(i);
+					if(current != '0' && current != '1' && current != '2' && current != '3' && current != '4' && current != '5' && current != '6' && current != '7' && current != '8'
+							&& current != '9') list.add(current);
+					saida = "";
+					for(char h: list) saida = saida + h +"";
+				}
+				if(!names.contains(saida)) {
+					if(saida.length()>maior) maior = saida.length();
+					names.add(saida);
+					persons.add(new Result(saida, solution.get().getValue(v)));
+					hel++;
+				}else 
+					for(int i = 0; i < hel; i++) 
+						if (persons.get(i).name.equals(saida)) persons.get(i).addHour(solution.get().getValue(v));
+			}
+			maior +=10;
+			for(int i = 0;i<maior;i++) System.out.print(" ");
+			for(int i = 1;i<=24;i++) System.out.print(i+" ");
+			System.out.println();
+			List <Integer> hours_work = new ArrayList<>();
+			for(int i = 0; i < hel; i++) {
+				System.out.print(persons.get(i).name);
+				for(int j = 0;j<maior-persons.get(i).name.length();j++)
+					System.out.print(" ");
+				for(int j = 1; j<=9;j++) {
+					if(persons.get(i).hours_work.contains(j))
+						System.out.print(1+" ");
+					else System.out.print(0 + " ");
+				}
+				System.out.print(" ");
+				for(int j = 10; j<=24;j++) {
+					if(persons.get(i).hours_work.contains(j))
+						System.out.print(1+"  ");
+					else System.out.print(0 + "  ");
+				}
+				System.out.println();
+			}
 		} else
-			System.out.println("Não há solução dadas as restrições atuais.");
-
+			System.out.println("Sem solucao para essas restricoes");
 	}
-
 }
